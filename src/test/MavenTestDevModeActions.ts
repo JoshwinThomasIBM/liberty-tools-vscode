@@ -97,7 +97,10 @@ it('Run tests for sample maven project', async () => {
 it('start maven with options from liberty dashboard', async () => {      
     
   const reportPath = path.join(utils.getMvnProjectPath(),"target","site","failsafe-report.html");
-  const deleteReport = await utils.deleteReports(reportPath);
+  const reportPath35 = path.join(utils.getMvnProjectPath(),"target","reports","failsafe.html");
+  let deleteReport = await utils.deleteReports(reportPath);
+  if(!deleteReport)
+    deleteReport = await utils.deleteReports(reportPath35);
   expect (deleteReport).to.be.true;
   await utils.launchDashboardAction(item, constants.START_DASHBOARD_ACTION_WITH_PARAM, constants.START_DASHBOARD_MAC_ACTION_WITH_PARAM);
   await utils.setCustomParameter("-DhotTests=true");  
@@ -109,6 +112,8 @@ it('start maven with options from liberty dashboard', async () => {
   {
     console.log("Server succuessfully started");  
     let checkFile = await utils.checkIfTestReportExists(reportPath);
+    if(!checkFile)
+      checkFile = await utils.checkIfTestReportExists(reportPath35);
     expect (checkFile).to.be.true;
     await utils.launchDashboardAction(item, constants.STOP_DASHBOARD_ACTION, constants.STOP_DASHBOARD_MAC_ACTION);    
     const serverStopStatus= await utils.checkTerminalforServerState(constants.SERVER_STOP_STRING);
@@ -127,7 +132,10 @@ it('start maven with options from liberty dashboard', async () => {
 it('start maven with history from liberty dashboard', async () => {  
 
   const reportPath = path.join(utils.getMvnProjectPath(),"target","site","failsafe-report.html");
-  const deleteReport = await utils.deleteReports(reportPath);
+  const reportPath35 = path.join(utils.getMvnProjectPath(),"target","reports","failsafe.html");
+  let deleteReport = await utils.deleteReports(reportPath);
+  if(!deleteReport)
+     deleteReport = await utils.deleteReports(reportPath35);
   expect (deleteReport).to.be.true;  
   await utils.launchDashboardAction(item, constants.START_DASHBOARD_ACTION_WITH_PARAM, constants.START_DASHBOARD_MAC_ACTION_WITH_PARAM);  
   const foundCommand = await utils.chooseCmdFromHistory("-DhotTests=true");
@@ -140,6 +148,8 @@ it('start maven with history from liberty dashboard', async () => {
   {
     console.log("Server succuessfully started");  
     let checkFile = await utils.checkIfTestReportExists(reportPath);
+    if(!checkFile)
+      checkFile = await utils.checkIfTestReportExists(reportPath35);
     expect (checkFile).to.be.true;
     await utils.launchDashboardAction(item, constants.STOP_DASHBOARD_ACTION, constants.STOP_DASHBOARD_MAC_ACTION);    
     const serverStopStatus= await utils.checkTerminalforServerState(constants.SERVER_STOP_STRING);
