@@ -115,7 +115,11 @@ export class ProjectProvider implements vscode.TreeDataProvider<LibertyProject> 
 		const pomFile = vscodePath.resolve(path, "pom.xml");
 		const gradleFile = vscodePath.resolve(path, "build.gradle");
 		let returnCode = 0;
-		if ( this.projects.has(pomFile) || this.projects.has(gradleFile)) {
+		if(this.isUntitledWorkspace()){
+			this.checkUntitledWorkspaceAndSaveIt();
+			returnCode=3
+
+		}else if ( this.projects.has(pomFile) || this.projects.has(gradleFile)) {
 			// project already exists
 			returnCode = 1;
 		} else {
@@ -201,6 +205,30 @@ export class ProjectProvider implements vscode.TreeDataProvider<LibertyProject> 
 		// trigger a re-render of the tree view
 		this._onDidChangeTreeData.fire(undefined);
 		statusMessage.dispose();
+		if(this.isUntitledWorkspace())
+			this.checkUntitledWorkspaceAndSaveIt();
+	}
+
+	public checkUntitledWorkspaceAndSaveIt():void{
+			vscode.window.showInformationMessage(
+				'You are currently in an untitled workspace. Would you like to save it?',
+				{ modal: true },
+				'Save Workspace'
+			).then(selection => {
+				if (selection === 'Save Workspace') {
+					vscode.commands.executeCommand('workbench.action.saveWorkspaceAs');
+				}
+			});
+	}
+
+	public isUntitledWorkspace():boolean{
+		const workspaceFolders = vscode.workspace.workspaceFolders;
+		if (workspaceFolders && workspaceFolders.length > 1 
+			 				 && vscode.workspace.name === "Untitled (Workspace)"){
+								return true;
+							 }
+
+		return false;
 	}
 
 	public fireChangeEvent(): void {
