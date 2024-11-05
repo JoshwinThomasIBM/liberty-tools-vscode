@@ -115,7 +115,7 @@ export class ProjectProvider implements vscode.TreeDataProvider<LibertyProject> 
 		const pomFile = vscodePath.resolve(path, "pom.xml");
 		const gradleFile = vscodePath.resolve(path, "build.gradle");
 		let returnCode = 0;
-		if(this.isUntitledWorkspace()){
+		if(this.isUntitledWorkspace()){  //checks if the workspace is untitled and contains morethan one project 
 			this.checkUntitledWorkspaceAndSaveIt();
 			returnCode=3
 
@@ -208,7 +208,11 @@ export class ProjectProvider implements vscode.TreeDataProvider<LibertyProject> 
 		if(this.isUntitledWorkspace())
 			this.checkUntitledWorkspaceAndSaveIt();
 	}
-
+	/*
+	Method asks the user to save the workspace first if it is untitled and the workspace contains morethan
+	one project. if not saved there are chances for the projects state not being saved and manually added
+	projects might not be visible in the liberty dashboard
+	*/
 	public checkUntitledWorkspaceAndSaveIt():void{
 			vscode.window.showInformationMessage(
 				'You are currently in an untitled workspace. Would you like to save it?',
@@ -221,6 +225,9 @@ export class ProjectProvider implements vscode.TreeDataProvider<LibertyProject> 
 			});
 	}
 
+	/*
+	Method identifies a workspace that is untitled and containing morethan one project 
+	*/
 	public isUntitledWorkspace():boolean{
 		const workspaceFolders = vscode.workspace.workspaceFolders;
 		if (workspaceFolders && workspaceFolders.length > 1 
