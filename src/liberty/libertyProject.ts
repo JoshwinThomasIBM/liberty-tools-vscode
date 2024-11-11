@@ -115,11 +115,7 @@ export class ProjectProvider implements vscode.TreeDataProvider<LibertyProject> 
 		const pomFile = vscodePath.resolve(path, "pom.xml");
 		const gradleFile = vscodePath.resolve(path, "build.gradle");
 		let returnCode = 0;
-		if(this.isUntitledWorkspace()){  //checks if the workspace is untitled and contains morethan one project 
-			this.checkUntitledWorkspaceAndSaveIt();
-			returnCode=3
-
-		}else if ( this.projects.has(pomFile) || this.projects.has(gradleFile)) {
+		if ( this.projects.has(pomFile) || this.projects.has(gradleFile)) {
 			// project already exists
 			returnCode = 1;
 		} else {
@@ -205,26 +201,34 @@ export class ProjectProvider implements vscode.TreeDataProvider<LibertyProject> 
 		// trigger a re-render of the tree view
 		this._onDidChangeTreeData.fire(undefined);
 		statusMessage.dispose();
-		if(this.isUntitledWorkspace())
-			this.checkUntitledWorkspaceAndSaveIt();
 	}
 	/*
 	Method asks the user to save the workspace first if it is untitled and the workspace contains morethan
 	one project. if not saved there are chances for the projects state not being saved and manually added
 	projects might not be visible in the liberty dashboard
 	*/
-	public checkUntitledWorkspaceAndSaveIt():void{
-			vscode.window.showInformationMessage(
-				'You are currently in an untitled workspace. Would you like to save it?',
-				{ modal: true },
-				'Save Workspace'
-			).then(selection => {
-				if (selection === 'Save Workspace') {
-					vscode.commands.executeCommand('workbench.action.saveWorkspaceAs');
-				}
-			});
+	public async checkUntitledWorkspaceAndSaveIt():Promise<void>{
+		return new Promise((resolve) => {
+			try {
+				vscode.window.showInformationMessage(
+					'You are currently in an untitled workspace. Would you like to save it?',
+					{ modal: true },
+					'Save Workspace'
+				).then(async (selection) => {
+					if (selection === 'Save Workspace') {
+						await this._context.globalState.update('workspaceSaveInProgress',true);
+						await vscode.commands.executeCommand('workbench.action.saveWorkspaceAs');
+					}else {
+						// No workspace save was initiated
+						resolve();
+					}
+				});
+			} catch (error) {
+				console.debug("exception while saving the workspace"+error);
+				
+			}		
+		});		
 	}
-
 	/*
 	Method identifies a workspace that is untitled and containing morethan one project 
 	*/

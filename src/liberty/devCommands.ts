@@ -173,10 +173,11 @@ function showListOfPathsToAdd(uris: string[]) {
         if (!selection) {
             return;
         }
-        const result = await projectProvider.addUserSelectedPath(selection, projectProvider.getProjects());
-        const message = localize(`add.project.manually.message.${result}`, selection);
-        (result !== 0) ? console.error(message) : console.info(message); projectProvider.fireChangeEvent();
-        vscode.window.showInformationMessage(message);
+        if(projectProvider.isUntitledWorkspace()){ 
+            await projectProvider.getContext().globalState.update('selectedProject',selection);
+            await projectProvider.checkUntitledWorkspaceAndSaveIt();
+        }
+        await addProjectsToTheDashBoard(projectProvider,selection);
     });
 }
 
@@ -640,3 +641,11 @@ function checkReportExists(report : any,reportType : string,reportTypeLabel: str
       });
     });
   }
+
+  export async function addProjectsToTheDashBoard(projectProvider : ProjectProvider,selection:string): Promise<void>{
+    const result = await projectProvider.addUserSelectedPath(selection,projectProvider.getProjects());
+    const message = localize(`add.project.manually.message.${result}`, selection);
+    (result !== 0) ? console.error(message) : console.info(message); projectProvider.fireChangeEvent();
+    vscode.window.showInformationMessage(message);
+    return Promise.resolve();
+}
