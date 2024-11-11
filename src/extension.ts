@@ -58,31 +58,31 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     resolveRequirements(api).then(requirements => {
         startLangServer(context, requirements, true).then(() => {
             console.log("Liberty client ready, registering commands");
-    
+
             item.text = localize("liberty.ls.thumbs.up");
             item.tooltip = localize("liberty.ls.started");
             toggleItem(window.activeTextEditor, item);
-    
+
             registerCommands(context);
         }, (error: any) => {
             console.log("Liberty client was not ready. Did not initialize");
             console.log(error);
-    
+
             item.text = localize("liberty.ls.thumbs.down");
             item.tooltip = localize("liberty.ls.failedstart");
         });
 
         startLangServer(context, requirements, false).then(() => {
             console.log("LSP4Jakarta is ready, binding requests...");
-    
+
             // Delegate requests from Jakarta LS to the Jakarta JDT core
             bindRequest(lsp4jakartaLS.FILEINFO_REQUEST);
             bindRequest(lsp4jakartaLS.JAVA_COMPLETION_REQUEST);
             bindRequest(lsp4jakartaLS.JAVA_CODEACTION_REQUEST);
-	    bindRequest(lsp4jakartaLS.JAVA_CODEACTION_RESOLVE_REQUEST);
+            bindRequest(lsp4jakartaLS.JAVA_CODEACTION_RESOLVE_REQUEST);
             bindRequest(lsp4jakartaLS.JAVA_DIAGNOSTICS_REQUEST);
-	    bindRequest(lsp4jakartaLS.JAVA_PROJECT_LABELS_REQUEST);
-    
+            bindRequest(lsp4jakartaLS.JAVA_PROJECT_LABELS_REQUEST);
+
             item.text = localize("jakarta.ls.thumbs.up");
             item.tooltip = localize("jakarta.ls.started");
             toggleItem(window.activeTextEditor, item);
@@ -105,14 +105,14 @@ function bindRequest(request: string) {
 
 function registerCommands(context: ExtensionContext) {
     let projectProvider = ProjectProvider.getInstance();
-	if ( !projectProvider ) {
-		projectProvider = new ProjectProvider(context);
-		ProjectProvider.setInstance(projectProvider);
-	}
-    if(projectProvider.getContext().globalState.get('workspaceSaveInProgress') && projectProvider.getContext().globalState.get('selectedProject')!==undefined){
-        devCommands.addProjectsToTheDashBoard(projectProvider,projectProvider.getContext().globalState.get('selectedProject') as string);
-        projectProvider.getContext().globalState.update('workspaceSaveInProgress',false);
-        projectProvider.getContext().globalState.update('selectedProject',undefined);
+    if (!projectProvider) {
+        projectProvider = new ProjectProvider(context);
+        ProjectProvider.setInstance(projectProvider);
+    }
+    if (projectProvider.getContext().globalState.get('workspaceSaveInProgress') && projectProvider.getContext().globalState.get('selectedProject') !== undefined) {
+        devCommands.addProjectsToTheDashBoard(projectProvider, projectProvider.getContext().globalState.get('selectedProject') as string);
+        projectProvider.getContext().globalState.update('workspaceSaveInProgress', false);
+        projectProvider.getContext().globalState.update('selectedProject', undefined);
     }
     if (vscode.workspace.workspaceFolders !== undefined) {
         registerFileWatcher(projectProvider);
@@ -159,11 +159,11 @@ function registerCommands(context: ExtensionContext) {
         vscode.commands.registerCommand("liberty.dev.open.gradle.test.report", (libProject?: LibertyProject) => devCommands.openReport("gradle", libProject)),
     );
     context.subscriptions.push(
-		vscode.commands.registerCommand("liberty.dev.add.project", (uri: vscode.Uri) => devCommands.addProject(uri)),
-	);
-	context.subscriptions.push(
-		vscode.commands.registerCommand("liberty.dev.remove.project", () => devCommands.removeProject()),
-	);
+        vscode.commands.registerCommand("liberty.dev.add.project", (uri: vscode.Uri) => devCommands.addProject(uri)),
+    );
+    context.subscriptions.push(
+        vscode.commands.registerCommand("liberty.dev.remove.project", () => devCommands.removeProject()),
+    );
     context.subscriptions.push(
         vscode.window.onDidCloseTerminal((closedTerminal: vscode.Terminal) => {
             devCommands.deleteTerminal(closedTerminal);
@@ -186,16 +186,16 @@ export function deactivate(): Promise<void[]> {
  * @param projectProvider Liberty Dev projects
  */
 export function registerFileWatcher(projectProvider: ProjectProvider): void {
-	const watcher: vscode.FileSystemWatcher = vscode.workspace.createFileSystemWatcher("{**/pom.xml,**/build.gradle,**/settings.gradle,**/src/main/liberty/config/server.xml}");
-	watcher.onDidCreate(async () => {
-		projectProvider.refresh();
-	});
-	watcher.onDidChange(async () => {
-		projectProvider.refresh();
-	});
-	watcher.onDidDelete(async () => {
-		projectProvider.refresh();
-	});
+    const watcher: vscode.FileSystemWatcher = vscode.workspace.createFileSystemWatcher("{**/pom.xml,**/build.gradle,**/settings.gradle,**/src/main/liberty/config/server.xml}");
+    watcher.onDidCreate(async () => {
+        projectProvider.refresh();
+    });
+    watcher.onDidChange(async () => {
+        projectProvider.refresh();
+    });
+    watcher.onDidDelete(async () => {
+        projectProvider.refresh();
+    });
 }
 
 function startLangServer(context: ExtensionContext, requirements: RequirementsData, isLiberty: boolean) {
@@ -214,12 +214,14 @@ function startLangServer(context: ExtensionContext, requirements: RequirementsDa
     return languageClient.start();
 }
 
-function prepareClientOptions(Liberty_LS :boolean) {
+function prepareClientOptions(Liberty_LS: boolean) {
     if (Liberty_LS) {
         return {
             // Filter to `*.properties` and `*.env` files, let LCLS handle filtering for default/custom configs
-            documentSelector: [{ scheme: "file", 
-                                pattern: "**/{*.properties,*.env}" }],
+            documentSelector: [{
+                scheme: "file",
+                pattern: "**/{*.properties,*.env}"
+            }],
             synchronize: {
                 configurationSection: SUPPORTED_LANGUAGE_IDS,
                 fileEvents: [
@@ -243,9 +245,9 @@ function prepareClientOptions(Liberty_LS :boolean) {
 }
 
 function toggleItem(editor: TextEditor | undefined, item: vscode.StatusBarItem) {
-    if(editor && editor.document && SUPPORTED_LANGUAGE_IDS.includes(editor.document.languageId)){
+    if (editor && editor.document && SUPPORTED_LANGUAGE_IDS.includes(editor.document.languageId)) {
         item.show();
-    } else{
+    } else {
         item.hide();
     }
 }
