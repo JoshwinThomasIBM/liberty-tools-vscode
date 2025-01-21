@@ -190,7 +190,7 @@ it('View Integration test report for maven project', async () => {
     
 }).timeout(10000);
 
-/*it('Run tests for sample maven project with surefire version 3.4.0', async () => {
+it('Run tests for sample maven project with surefire version 3.4.0', async () => {
 
   // Define the report paths
   const reportPaths = [
@@ -232,7 +232,7 @@ it('View Integration test report for maven project', async () => {
   expect(serverStartStatus).to.be.true;
 }).timeout(350000);
 
-it('View Unit test report for maven project with surefire version 3.4.0', async () => {
+/*it('View Unit test report for maven project with surefire version 3.4.0', async () => {
 
   await utils.launchDashboardAction(item, constants.UTR_DASHABOARD_ACTION, constants.UTR_DASHABOARD_MAC_ACTION);
   tabs = await new EditorView().getOpenEditorTitles();
