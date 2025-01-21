@@ -220,6 +220,7 @@ it('Run tests for sample maven project with surefire version 3.4.0', async () =>
     await utils.launchDashboardAction(item, constants.STOP_DASHBOARD_ACTION, constants.STOP_DASHBOARD_MAC_ACTION);
     const serverStopStatus = await utils.checkTerminalforServerState(constants.SERVER_STOP_STRING);
     await utils.revertPomFile();
+    await utils.clearMavenPluginCache();
     if (!serverStopStatus) {
       console.error("Server stopped message not found in the terminal");
     }
