@@ -240,13 +240,13 @@ it('View Unit test report for maven project with surefire version 3.4.0', async 
 
 }).timeout(10000);
 
-/*it('View Integration test report for maven project with surefire version 3.4.0', async () => {
+it('View Integration test report for maven project with surefire version 3.4.0', async () => {
 
   await utils.launchDashboardAction(item, constants.ITR_DASHBOARD_ACTION, constants.ITR_DASHBOARD_MAC_ACTION);
   tabs = await new EditorView().getOpenEditorTitles();
   expect(tabs.indexOf(constants.FAILSAFE_REPORT_TITLE) > -1, "Integration test report not found").to.equal(true);
 
-}).timeout(10000);*/
+}).timeout(10000);
 
 it('attach debugger for start with custom parameter event', async () => {
   console.log("start attach debugger");
