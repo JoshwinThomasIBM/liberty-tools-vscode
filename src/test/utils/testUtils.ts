@@ -117,9 +117,8 @@ export function getMvnProjectPath(): string {
     do{
       VSBrowser.instance.takeScreenshot('before clean slate for clipboard for '+count);
       clipboard.writeSync('');//clean slate for clipboard      
-      await workbench.executeCommand('terminal select all');
-      VSBrowser.instance.takeScreenshot('after terminal select all'+count);    
-      await workbench.executeCommand('terminal copy');
+      await workbench.executeCommand('terminal select all');    
+      VSBrowser.instance.takeScreenshot('after terminal select all'+count); 
       const text = clipboard.readSync();        
       console.log("debug: "+count+" -->" + text);
       VSBrowser.instance.takeScreenshot('after clipboard.readSync text '+count);      ;
