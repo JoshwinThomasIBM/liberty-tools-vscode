@@ -255,8 +255,10 @@ it('attach debugger for start with custom parameter event', async () => {
   try {
     await utils.launchDashboardAction(item,constants.START_DASHBOARD_ACTION_WITH_PARAM, constants.START_DASHBOARD_MAC_ACTION_WITH_PARAM);
     await utils.setCustomParameter("-DdebugPort=7777");   
+    VSBrowser.instance.takeScreenshot('degbugging1 3.4.0');
     await utils.delay(30000);
     
+    VSBrowser.instance.takeScreenshot('degbugging2 3.4.0');
     isServerRunning = await utils.checkTerminalforServerState(constants.SERVER_START_STRING);
     if (!isServerRunning)
       console.log("Server started with params message not found in terminal");
@@ -286,6 +288,7 @@ it('attach debugger for start with custom parameter event', async () => {
       console.log("Server stopped successfully ");
   }
   } catch (e) {
+    VSBrowser.instance.takeScreenshot('degbugging3 3.4.0');
     console.error("error - ", e)
   } finally {
     console.log("finally block: is server running -  ", isServerRunning);
