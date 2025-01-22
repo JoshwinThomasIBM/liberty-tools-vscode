@@ -5,6 +5,7 @@ import { STOP_DASHBOARD_MAC_ACTION  } from '../definitions/constants';
 import { MapContextMenuforMac } from './macUtils';
 import clipboard = require('clipboardy');
 import { expect } from 'chai';
+import { utils } from 'mocha';
 
 export function delay(millisec: number) {
     return new Promise( resolve => setTimeout(resolve, millisec) );
@@ -116,7 +117,8 @@ export function getMvnProjectPath(): string {
     do{
       VSBrowser.instance.takeScreenshot('degbugging 10- 3.4.0');
       clipboard.writeSync('');//clean slate for clipboard      
-      await workbench.executeCommand('terminal select all');       
+      await workbench.executeCommand('terminal select all');  
+      await delay(30000);     
       const text = clipboard.readSync();        
       console.log("debug:" + text)      ;
       if( text.includes(serverStatusCode)){
