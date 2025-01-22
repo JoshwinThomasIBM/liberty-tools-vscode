@@ -115,28 +115,28 @@ export function getMvnProjectPath(): string {
     let  foundText = false;
     let count=0;    
     do{
-      VSBrowser.instance.takeScreenshot('degbugging 10- 3.4.0');
+      VSBrowser.instance.takeScreenshot('before clean slate for clipboard for '+count);
       clipboard.writeSync('');//clean slate for clipboard      
-      await workbench.executeCommand('terminal select all');  
-      await delay(30000);     
+      await workbench.executeCommand('terminal select all');    
       const text = clipboard.readSync();        
-      console.log("debug:" + text)      ;
+      console.log("debug:" + text);
+      VSBrowser.instance.takeScreenshot('after clipboard.readSync text');      ;
       if( text.includes(serverStatusCode)){
-        VSBrowser.instance.takeScreenshot('degbugging 11- 3.4.0');
+        VSBrowser.instance.takeScreenshot('after text includes server status code for '+count);
         foundText = true;
         console.log("Found text "+ serverStatusCode);
         break;
       }
       else if(text.includes("FAILURE"))
       {     
-        VSBrowser.instance.takeScreenshot('degbugging 12- 3.4.0');
+        VSBrowser.instance.takeScreenshot('text includes failure for '+count);
         console.log("Found failure "+ text);
         foundText = false;             
         break;      
       }
       else
       {
-        VSBrowser.instance.takeScreenshot('degbugging 13- 3.4.0');
+        VSBrowser.instance.takeScreenshot('text doest contain server status or failure for '+count);
         console.log("test is running ...")
         foundText = false;
       }
@@ -144,7 +144,7 @@ export function getMvnProjectPath(): string {
       await workbench.getDriver().sleep(10000);
     } while(!foundText && (count <= 20));
     await workbench.executeCommand('terminal clear');
-    VSBrowser.instance.takeScreenshot('degbugging 14- 3.4.0');
+    VSBrowser.instance.takeScreenshot('after executing terminal clear ');
     return foundText;
   }
   

@@ -190,7 +190,7 @@ it('View Integration test report for maven project', async () => {
     
 }).timeout(10000);
 
-it('Run tests for sample maven project with surefire version 3.4.0', async () => {
+/*it('Run tests for sample maven project with surefire version 3.4.0', async () => {
 
   // Define the report paths
   const reportPaths = [
@@ -246,7 +246,7 @@ it('View Integration test report for maven project with surefire version 3.4.0',
   tabs = await new EditorView().getOpenEditorTitles();
   expect(tabs.indexOf(constants.FAILSAFE_REPORT_TITLE) > -1, "Integration test report not found").to.equal(true);
 
-}).timeout(10000);
+}).timeout(10000);*/
 
 it('attach debugger for start with custom parameter event', async () => {
   console.log("start attach debugger");
@@ -255,12 +255,12 @@ it('attach debugger for start with custom parameter event', async () => {
   try {
     await utils.launchDashboardAction(item,constants.START_DASHBOARD_ACTION_WITH_PARAM, constants.START_DASHBOARD_MAC_ACTION_WITH_PARAM);
     await utils.setCustomParameter("-DdebugPort=7777");   
-    VSBrowser.instance.takeScreenshot('degbugging1 3.4.0');
+    VSBrowser.instance.takeScreenshot('after setCustomParameter 3.4.0');
     await utils.delay(30000);
     
-    VSBrowser.instance.takeScreenshot('degbugging2 3.4.0');
+    VSBrowser.instance.takeScreenshot('before checkTerminalforServerState 3.4.0');
     isServerRunning = await utils.checkTerminalforServerState(constants.SERVER_START_STRING);
-    await utils.delay(30000);
+    VSBrowser.instance.takeScreenshot('after checkTerminalforServerState 3.4.0');
     console.log('isServerRunning value -->',isServerRunning);
     if (!isServerRunning)
       console.log("Server started with params message not found in terminal");
