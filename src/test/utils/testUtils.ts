@@ -118,9 +118,10 @@ export function getMvnProjectPath(): string {
       VSBrowser.instance.takeScreenshot('before clean slate for clipboard for '+count);
       clipboard.writeSync('');//clean slate for clipboard      
       await workbench.executeCommand('terminal select all');    
+      await workbench.executeCommand('terminal copy');
       const text = clipboard.readSync();        
-      console.log("debug:" + text);
-      VSBrowser.instance.takeScreenshot('after clipboard.readSync text');      ;
+      console.log("debug: "+count+" -->" + text);
+      VSBrowser.instance.takeScreenshot('after clipboard.readSync text '+count);      ;
       if( text.includes(serverStatusCode)){
         VSBrowser.instance.takeScreenshot('after text includes server status code for '+count);
         foundText = true;
@@ -143,6 +144,7 @@ export function getMvnProjectPath(): string {
       count++;   
       await workbench.getDriver().sleep(10000);
     } while(!foundText && (count <= 20));
+    VSBrowser.instance.takeScreenshot('after while loop and before clear terminal');
     await workbench.executeCommand('terminal clear');
     VSBrowser.instance.takeScreenshot('after executing terminal clear ');
     return foundText;
