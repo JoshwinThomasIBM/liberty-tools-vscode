@@ -113,7 +113,8 @@ export function getMvnProjectPath(): string {
   export async function checkTerminalforServerState(serverStatusCode : string ): Promise <Boolean> {
     const workbench = new Workbench();
     let  foundText = false;
-    let count=0;    
+    let count=0;   
+    await delay(30000); 
     do{
       VSBrowser.instance.takeScreenshot('before clean slate for clipboard for '+count);
       clipboard.writeSync('');//clean slate for clipboard      

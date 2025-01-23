@@ -208,17 +208,18 @@ it('Run tests for sample maven project with surefire version 3.4.0', async () =>
 
   await utils.clearMavenPluginCache();
   await utils.modifyPomFile();
-  await utils.launchDashboardAction(item, constants.START_DASHBOARD_ACTION_WITH_PARAM, constants.START_DASHBOARD_MAC_ACTION_WITH_PARAM);
+  await utils.launchDashboardAction(item, constants.START_DASHBOARD_ACTION_WITH_PARAM, constants.START_DASHBOARD_MAC_ACTION_WITH_PARAM);  
   const foundCommand = await utils.chooseCmdFromHistory("-DhotTests=true");
-  expect(foundCommand).to.be.true;
+  expect (foundCommand).to.be.true;  
   await utils.delay(30000);
   const serverStartStatus = await utils.checkTerminalforServerState(constants.SERVER_START_STRING);
-  if (!serverStartStatus)
+  if(!serverStartStatus)
     console.log("Server started with params message not found in the terminal ");
-  else {
+  else
+  {
     console.log("Server succuessfully started");
-    await utils.launchDashboardAction(item, constants.STOP_DASHBOARD_ACTION, constants.STOP_DASHBOARD_MAC_ACTION);
-    const serverStopStatus = await utils.checkTerminalforServerState(constants.SERVER_STOP_STRING);
+    await utils.launchDashboardAction(item, constants.STOP_DASHBOARD_ACTION, constants.STOP_DASHBOARD_MAC_ACTION);    
+    const serverStopStatus= await utils.checkTerminalforServerState(constants.SERVER_STOP_STRING);
     await utils.revertPomFile();
     await utils.clearMavenPluginCache();
     if (!serverStopStatus) {
