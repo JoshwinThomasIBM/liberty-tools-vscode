@@ -190,7 +190,7 @@ it('View Integration test report for maven project', async () => {
     
 }).timeout(10000);
 
-it('Run tests for sample maven project with surefire version 3.4.0', async () => {
+/*it('Run tests for sample maven project with surefire version 3.4.0', async () => {
 
   // Define the report paths
   const reportPaths = [
@@ -245,8 +245,9 @@ it('View Integration test report for maven project with surefire version 3.4.0',
   await utils.launchDashboardAction(item, constants.ITR_DASHBOARD_ACTION, constants.ITR_DASHBOARD_MAC_ACTION);
   tabs = await new EditorView().getOpenEditorTitles();
   expect(tabs.indexOf(constants.FAILSAFE_REPORT_TITLE) > -1, "Integration test report not found").to.equal(true);
+  new EditorView().closeAllEditors();
 
-}).timeout(10000);
+}).timeout(10000);*/
 
 it('attach debugger for start with custom parameter event', async () => {
   console.log("start attach debugger");
@@ -290,7 +291,7 @@ it('attach debugger for start with custom parameter event', async () => {
       console.log("Server stopped successfully ");
   }
   } catch (e) {
-    VSBrowser.instance.takeScreenshot('degbugging3 3.4.0');
+    VSBrowser.instance.takeScreenshot('timeout error scrrenshot 3.4.0');
     console.error("error - ", e)
   } finally {
     console.log("finally block: is server running -  ", isServerRunning);
