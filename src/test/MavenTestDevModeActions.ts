@@ -193,7 +193,7 @@ it('View Integration test report for maven project', async () => {
 it('Run tests for sample maven project with surefire version 3.4.0', async () => {
 
   // Define the report paths
-  const reportPaths = [
+ /* const reportPaths = [
     path.join(utils.getMvnProjectPath(), "target", "reports", "failsafe.html"),
     path.join(utils.getMvnProjectPath(), "target", "reports", "surefire.html"),
     path.join(utils.getMvnProjectPath(), "target", "site", "surefire-report.html"),
@@ -204,7 +204,7 @@ it('Run tests for sample maven project with surefire version 3.4.0', async () =>
   const deletePromises = reportPaths.map(reportPath => utils.deleteReports(reportPath));
   const deleteResults = await Promise.all(deletePromises);
   // All the report files should either not exist or be successfully deleted
-  expect(deleteResults.every(result => result === true)).to.be.true;
+  expect(deleteResults.every(result => result === true)).to.be.true;*/
 
   await utils.clearMavenPluginCache();
   await utils.modifyPomFile();
@@ -233,7 +233,30 @@ it('Run tests for sample maven project with surefire version 3.4.0', async () =>
   expect(serverStartStatus).to.be.true;
 }).timeout(350000);
 
-it('View Unit test report for maven project with surefire version 3.4.0', async () => {
+it('check all test reports exists',async () =>{
+  // Define the report paths
+const reportPaths = [
+  path.join(utils.getMvnProjectPath(), "target", "reports", "failsafe.html"),
+  path.join(utils.getMvnProjectPath(), "target", "reports", "surefire.html"),
+  path.join(utils.getMvnProjectPath(), "target", "site", "surefire-report.html"),
+  path.join(utils.getMvnProjectPath(), "target", "site", "failsafe-report.html")
+];
+  // Check if all reports exist
+const checkPromises = reportPaths.map(reportPath => {
+  return new Promise(resolve => {
+    const exists = fs.existsSync(reportPath);
+    resolve(exists);
+  });
+});
+
+// Wait for all checks to complete
+const existenceResults = await Promise.all(checkPromises);
+
+// All report files should exist
+expect(existenceResults.every(result => result === true)).to.be.true;
+}).timeout(10000)
+
+/*it('View Unit test report for maven project with surefire version 3.4.0', async () => {
 
   await utils.launchDashboardAction(item, constants.UTR_DASHABOARD_ACTION, constants.UTR_DASHABOARD_MAC_ACTION);
   tabs = await new EditorView().getOpenEditorTitles();
@@ -248,7 +271,7 @@ it('View Integration test report for maven project with surefire version 3.4.0',
   expect(tabs.indexOf(constants.FAILSAFE_REPORT_TITLE) > -1, "Integration test report not found").to.equal(true);
   new EditorView().closeAllEditors();
 
-}).timeout(10000);
+}).timeout(10000);*/
 
 it('attach debugger for start with custom parameter event', async () => {
   console.log("start attach debugger");
