@@ -1,5 +1,5 @@
 import path = require('path');
-import { Workbench, InputBox, DefaultTreeItem, ModalDialog, VSBrowser } from 'vscode-extension-tester';
+import { Workbench, InputBox, DefaultTreeItem, ModalDialog, VSBrowser, BottomBarPanel } from 'vscode-extension-tester';
 import * as fs from 'fs';
 import { STOP_DASHBOARD_MAC_ACTION  } from '../definitions/constants';
 import { MapContextMenuforMac } from './macUtils';
@@ -119,7 +119,8 @@ export function getMvnProjectPath(): string {
       clipboard.writeSync('');//clean slate for clipboard      
       await workbench.executeCommand('terminal select all');    
       VSBrowser.instance.takeScreenshot('after terminal select all'+count); 
-      const text = clipboard.readSync();        
+      const terminalView = await new BottomBarPanel().openTerminalView();
+      const text = await terminalView.getText();     
       console.log("debug: "+count+" -->" + text);
       VSBrowser.instance.takeScreenshot('after clipboard.readSync text '+count);      ;
       if( text.includes(serverStatusCode)){
