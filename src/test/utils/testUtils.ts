@@ -121,7 +121,7 @@ export function getMvnProjectPath(): string {
     let count=0;    
     do{
       console.log('loop count :: '+count);
-      VSBrowser.instance.takeScreenshot('screen shot for loop '+serverStatusCode +'::'+count);  
+      VSBrowser.instance.takeScreenshot('screen shot for loop '+serverStatusCode +' '+count);  
       clipboard.writeSync('');//clean slate for clipboard      
       await workbench.executeCommand('terminal select all');       
       const text = clipboard.readSync();        
@@ -146,7 +146,7 @@ export function getMvnProjectPath(): string {
       await workbench.getDriver().sleep(10000);
     } while(!foundText && (count <= 20));
     console.log('outside do while loop');
-    VSBrowser.instance.takeScreenshot('screen shot after loop for '+serverStatusCode +'::'+count);
+    VSBrowser.instance.takeScreenshot('screen shot after loop for '+serverStatusCode+' '+count);
     await workbench.executeCommand('terminal clear');
     return foundText;
   }
