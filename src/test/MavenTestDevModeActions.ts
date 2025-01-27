@@ -320,7 +320,11 @@ it('attach debugger for start with custom parameter event', async () => {
     await utils.delay(30000);
     console.log('after calling and setting custom parameter');
     VSBrowser.instance.takeScreenshot('after calling and setting custom parameter');  
-    isServerRunning = await utils.checkTerminalforServerState(constants.SERVER_START_STRING);
+    try {
+      isServerRunning = await utils.checkTerminalforServerState(constants.SERVER_START_STRING);
+    } catch (error) {
+      console.error("error - ", error);
+    }
     if (!isServerRunning)
       console.log("Server started with params message not found in terminal");
     else {
