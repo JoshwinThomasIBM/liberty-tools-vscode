@@ -1,5 +1,5 @@
 import path = require('path');
-import { Workbench, InputBox, DefaultTreeItem, ModalDialog } from 'vscode-extension-tester';
+import { Workbench, InputBox, DefaultTreeItem, ModalDialog, VSBrowser } from 'vscode-extension-tester';
 import * as fs from 'fs';
 import { STOP_DASHBOARD_MAC_ACTION  } from '../definitions/constants';
 import { MapContextMenuforMac } from './macUtils';
@@ -41,11 +41,14 @@ export function getMvnProjectPath(): string {
 
   export async function setCustomParameter(customParam: string) {
 
-    console.log("Setting custom Parameter");    
+    console.log("Setting custom Parameter");  
+    VSBrowser.instance.takeScreenshot('before setting custom parameter');  
     const input = new InputBox(); 
     await input.click();   
+    VSBrowser.instance.takeScreenshot('after inputbox click');
     await input.setText(customParam);      
-    await input.confirm();       
+    await input.confirm();   
+    VSBrowser.instance.takeScreenshot('after setting custom parameter');    
   
   }
 

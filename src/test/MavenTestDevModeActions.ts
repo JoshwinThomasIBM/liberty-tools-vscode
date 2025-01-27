@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { InputBox, Workbench,SideBarView, ViewItem, ViewSection,EditorView, DefaultTreeItem ,  DebugView } from 'vscode-extension-tester';
+import { InputBox, Workbench,SideBarView, ViewItem, ViewSection,EditorView, DefaultTreeItem ,  DebugView, VSBrowser } from 'vscode-extension-tester';
 import * as utils from './utils/testUtils';
 import * as constants from './definitions/constants';
 import path = require('path');
@@ -290,7 +290,8 @@ it('attach debugger for start with custom parameter event', async () => {
     await utils.launchDashboardAction(item,constants.START_DASHBOARD_ACTION_WITH_PARAM, constants.START_DASHBOARD_MAC_ACTION_WITH_PARAM);
     await utils.setCustomParameter("-DdebugPort=7777");   
     await utils.delay(30000);
-    
+    console.log('after calling and setting custom parameter');
+    VSBrowser.instance.takeScreenshot('after calling and setting custom parameter');  
     isServerRunning = await utils.checkTerminalforServerState(constants.SERVER_START_STRING);
     if (!isServerRunning)
       console.log("Server started with params message not found in terminal");
@@ -331,6 +332,42 @@ it('attach debugger for start with custom parameter event', async () => {
   }
   expect(attachStatus).to.be.true;
 }).timeout(350000);
+
+
+  /**
+   * The following after hook copies the screenshot from the temporary folder in which it is saved to a known permanent location in the project folder.
+   * The MavenTestDevModeAction is the last test file that will be executed. Hence the after hook placed here
+   * ensures that all the screenshots will be copied to a known permanent location in the project folder.
+   */
+  after(() => {
+    const sourcePath = VSBrowser.instance.getScreenshotsDir();
+    const destinationPath = './screenshots';
+
+    copyFolderContents(sourcePath, destinationPath);
+  });
+
+  function copyFolderContents(sourceFolder: string, destinationFolder: string): void {
+    if (!fs.existsSync(sourceFolder)) {
+      return;
+    }
+
+    if (!fs.existsSync(destinationFolder)) {
+      fs.mkdirSync(destinationFolder);
+    }
+
+    const files = fs.readdirSync(sourceFolder);
+    for (const file of files) {
+      const sourcePath = path.join(sourceFolder, file);
+      const destinationPath = path.join(destinationFolder, file);
+
+      if (fs.statSync(sourcePath).isDirectory()) {
+          copyFolderContents(sourcePath, destinationPath);
+      } else {
+          fs.copyFileSync(sourcePath, destinationPath);
+      }
+    }
+  }
+
 
 
 });
