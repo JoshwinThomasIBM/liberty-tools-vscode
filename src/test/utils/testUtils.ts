@@ -33,7 +33,10 @@ export function getMvnProjectPath(): string {
       console.log("before contextmenu")  ;
       const menuItem = await item.openContextMenu(); 
       console.log("before select")  ; 
+      VSBrowser.instance.takeScreenshot('before select"');
       await menuItem.select(action);
+      VSBrowser.instance.takeScreenshot('after select"');
+
     }
 
   }
