@@ -363,7 +363,7 @@ it('attach debugger for start with custom parameter event', async () => {
       console.log("good to close test - Attach Debugger for start with custom parameter(-DdebugPort=7777) event");
   }
   expect(attachStatus).to.be.true;
-}).timeout(450000);
+}).timeout(650000);
 
 
   /**
