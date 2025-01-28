@@ -123,7 +123,8 @@ export function getMvnProjectPath(): string {
       try {
         console.log('loop count :: '+count);
         VSBrowser.instance.takeScreenshot('screen shot for loop '+serverStatusCode +' '+count);  
-        clipboard.writeSync('');//clean slate for clipboard      
+        clipboard.writeSync('');//clean slate for clipboard  
+        delay(10000);    
         await workbench.executeCommand('terminal select all');  
       } catch (error) {
         VSBrowser.instance.takeScreenshot('screen shot for loop for clipboard');  
