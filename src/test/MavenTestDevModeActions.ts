@@ -214,6 +214,8 @@ it('View Unit test report for maven project', async () => {
   tabs = await new EditorView().getOpenEditorTitles();
   //expect (tabs[1], "Unit test report not found").to.equal(constants.SUREFIRE_REPORT_TITLE);
   expect (tabs.indexOf(constants.SUREFIRE_REPORT_TITLE)>-1, "Unit test report not found").to.equal(true); 
+  const workbench = new Workbench();
+  await workbench.executeCommand(constants.CLOSE_EDITOR);
     
 }).timeout(10000);
 
@@ -223,6 +225,8 @@ it('View Integration test report for maven project', async () => {
   tabs = await new EditorView().getOpenEditorTitles();
   //expect (tabs[2], "Integration test report not found").to.equal(constants.FAILSAFE_REPORT_TITLE);
   expect (tabs.indexOf(constants.FAILSAFE_REPORT_TITLE)>-1, "Integration test report not found").to.equal(true);
+  const workbench = new Workbench();
+  await workbench.executeCommand(constants.CLOSE_EDITOR);
     
 }).timeout(10000);
 
@@ -291,6 +295,8 @@ it('View Unit test report for maven project with surefire 3.4.0', async () => {
   tabs = await new EditorView().getOpenEditorTitles();
   //expect (tabs[1], "Unit test report not found").to.equal(constants.SUREFIRE_REPORT_TITLE);
   expect (tabs.indexOf(constants.SUREFIRE_REPORT_TITLE)>-1, "Unit test report not found").to.equal(true); 
+  const workbench = new Workbench();
+  await workbench.executeCommand(constants.CLOSE_EDITOR);
     
 }).timeout(10000);
 
@@ -300,6 +306,8 @@ it('View Integration test report for maven project  with surefire 3.4.0', async 
   tabs = await new EditorView().getOpenEditorTitles();
   //expect (tabs[2], "Integration test report not found").to.equal(constants.FAILSAFE_REPORT_TITLE);
   expect (tabs.indexOf(constants.FAILSAFE_REPORT_TITLE)>-1, "Integration test report not found").to.equal(true);
+  const workbench = new Workbench();
+  await workbench.executeCommand(constants.CLOSE_EDITOR);
   new EditorView().closeAllEditors();
   item.click();
     
@@ -318,13 +326,9 @@ it('attach debugger for start with custom parameter event', async () => {
     await utils.launchDashboardAction(item,constants.START_DASHBOARD_ACTION_WITH_PARAM, constants.START_DASHBOARD_MAC_ACTION_WITH_PARAM);
     await utils.setCustomParameter("-DdebugPort=7777");   
     await utils.delay(30000);
-    console.log('after calling and setting custom parameter');
-    VSBrowser.instance.takeScreenshot('after calling and setting custom parameter');  
-    try {
+    //console.log('after calling and setting custom parameter');
+    //VSBrowser.instance.takeScreenshot('after calling and setting custom parameter');  
       isServerRunning = await utils.checkTerminalforServerState(constants.SERVER_START_STRING);
-    } catch (error) {
-      console.error("error - ", error);
-    }
     if (!isServerRunning)
       console.log("Server started with params message not found in terminal");
     else {
