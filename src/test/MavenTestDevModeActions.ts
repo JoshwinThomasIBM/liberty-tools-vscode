@@ -27,11 +27,13 @@ it('getViewControl works with the correct label',  async() => {
  
 }).timeout(10000);
 
-it('delete target directory and clear maven plugin Cache', async() =>{
+it('Execute mvn clean and clear maven plugin cache', async() =>{
 
-   utils.removeDirectoryByPath(path.join(utils.getMvnProjectPath(),"target")); // removing the target directory before running tests
-   utils.clearMavenPluginCache(); // clearing the cache so initially it uses the latest verison of the plugins and initiate the testing
-
+  await VSBrowser.instance.openResources(path.join(utils.getMvnProjectPath(), 'ForTest.md'));
+  const workbench = new Workbench();
+  await workbench.executeCommand('workbench.action.terminal.runSelectedText');
+  await utils.clearMavenPluginCache();
+ 
 }).timeout(10000);
 
 
@@ -281,16 +283,12 @@ it('check all test reports exists', async () => {
   expect(existenceResults.every(result => result === true)).to.be.true;
 }).timeout(10000);
 
-it('delete reports in target/reports', async () => {  
 
-  let deleteReport1 = await utils.deleteReports(path.join(utils.getMvnProjectPath(), "target", "reports", "failsafe.html")); 
-  let deleteReport2 = await utils.deleteReports(path.join(utils.getMvnProjectPath(), "target", "reports", "surefire.html")); 
-  expect(deleteReport1 && deleteReport2).to.be.true;
-  
-}).timeout(10000);
 
 it('View Unit test report for maven project with surefire 3.4.0', async () => {  
-  
+  let deleteFailsafeReport = await utils.deleteReports(path.join(utils.getMvnProjectPath(), "target", "reports", "failsafe.html")); 
+  let deleteSurefireReport = await utils.deleteReports(path.join(utils.getMvnProjectPath(), "target", "reports", "surefire.html")); 
+  expect(deleteFailsafeReport && deleteSurefireReport).to.be.true;
   await utils.launchDashboardAction(item,constants.UTR_DASHABOARD_ACTION, constants.UTR_DASHABOARD_MAC_ACTION);   
   tabs = await new EditorView().getOpenEditorTitles();
   //expect (tabs[1], "Unit test report not found").to.equal(constants.SUREFIRE_REPORT_TITLE);
@@ -326,9 +324,8 @@ it('attach debugger for start with custom parameter event', async () => {
     await utils.launchDashboardAction(item,constants.START_DASHBOARD_ACTION_WITH_PARAM, constants.START_DASHBOARD_MAC_ACTION_WITH_PARAM);
     await utils.setCustomParameter("-DdebugPort=7777");   
     await utils.delay(30000);
-    //console.log('after calling and setting custom parameter');
-    //VSBrowser.instance.takeScreenshot('after calling and setting custom parameter');  
-      isServerRunning = await utils.checkTerminalforServerState(constants.SERVER_START_STRING);
+
+    isServerRunning = await utils.checkTerminalforServerState(constants.SERVER_START_STRING);
     if (!isServerRunning)
       console.log("Server started with params message not found in terminal");
     else {

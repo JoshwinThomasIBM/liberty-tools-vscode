@@ -120,19 +120,9 @@ export function getMvnProjectPath(): string {
     let  foundText = false;
     let count=0;    
     do{
-      //try {
-        console.log('loop count :: '+count);
-        VSBrowser.instance.takeScreenshot('screen shot for loop '+serverStatusCode +' '+count);  
-        clipboard.writeSync('');//clean slate for clipboard  
-        await delay(10000);    
-        await workbench.executeCommand('terminal select all');  
-     // } catch (error) {
-        VSBrowser.instance.takeScreenshot('screen shot for loop for clipboard');  
-        //console.error('error inside try catch for clipboard'+error);
-        //console.log('error inside try catch for clipboard'+error);
-     // }
-          
-    // try {
+      clipboard.writeSync('');//clean slate for clipboard  
+      await delay(10000);    
+      await workbench.executeCommand('terminal select all');
       const text = clipboard.readSync();        
       console.log("debug:" + text)      ;
       if( text.includes(serverStatusCode)){
@@ -153,25 +143,10 @@ export function getMvnProjectPath(): string {
       }
       count++;   
       await workbench.getDriver().sleep(10000);
-     //} catch (error) {
-      VSBrowser.instance.takeScreenshot('screen shot for loop try catch for ifs');
-     // console.error('error inside try catch for ifs '+error);
-     // console.log('error inside try catch for ifs '+error);
-     //}
     } while(!foundText && (count <= 20));
-    //try {
-      console.log('outside do while loop');
-    VSBrowser.instance.takeScreenshot('screen shot after loop for '+serverStatusCode+' '+count);
     await workbench.executeCommand('terminal clear');
-    //} catch (error) {
-      VSBrowser.instance.takeScreenshot('screen shot  for terminal clear');
-      //console.error('error inside try catch for terminal clear '+error);
-      //console.log('error inside try catch for terminal clear '+error);
-    //}
     return foundText;
-    }
-    
-  
+  }
   
 
   export async function checkTestStatus(testStatus: string): Promise <Boolean>{
